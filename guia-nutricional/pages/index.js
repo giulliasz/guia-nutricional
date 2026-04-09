@@ -18,12 +18,17 @@ const inp = {
   fontFamily: "inherit", boxSizing: "border-box", lineHeight: "1.5",
 };
 
-function F({ label, children }) {
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
+
+function F({ label, children, hint }) {
   return (
     <div style={{ marginBottom: "16px" }}>
-      <label style={{ display: "block", color: "#90be50", fontSize: "11px", fontWeight: "700", letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: "6px" }}>
+      <label style={{ display: "block", color: "#90be50", fontSize: "11px", fontWeight: "700", letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: "4px" }}>
         {label}
       </label>
+      {hint && <p style={{ color: G.muted, fontSize: "11px", marginBottom: "6px" }}>{hint}</p>}
       {children}
     </div>
   );
@@ -45,10 +50,11 @@ const Txt = ({ v, onChange, ph, rows = 3 }) => (
 // ── PDF ──────────────────────────────────────────────────────────────────
 function abrirPDF(conteudo, d) {
   const hoje = new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+  const nomeFormatado = toTitleCase(d.nome);
   const win = window.open("", "_blank");
   win.document.write(`<!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8">
-<title>Guia Nutricional – ${d.nome}</title>
+<title>Guia Nutricional – ${nomeFormatado}</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -119,10 +125,17 @@ strong{color:#1a3808}
 .final{background:linear-gradient(150deg,#152d08 0%,#1e4010 60%,#0e2008 100%);padding:72px 64px;text-align:center;page-break-before:always;position:relative}
 .final-sep{width:40px;height:1.5px;background:linear-gradient(90deg,transparent,#7fc235,transparent);margin:0 auto 32px}
 .final h2{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#f4f1ea;line-height:1.2;margin-bottom:28px}
-.final p{max-width:520px;margin:0 auto 14px;color:rgba(244,241,234,.72);font-size:14.5px;line-height:1.9}
+.final p{max-width:560px;margin:0 auto 14px;color:rgba(244,241,234,.78);font-size:15px;line-height:1.9;text-align:left}
 .final-ass{margin-top:48px;font-family:'Playfair Display',serif;font-size:21px;font-style:italic;color:#b8e060}
 .final-cargo{font-size:10px;color:rgba(244,241,234,.3);letter-spacing:.16em;text-transform:uppercase;margin-top:5px}
-@media print{.capa{page-break-after:always}.secao{page-break-inside:avoid}.final{page-break-before:always}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{
+  .capa{page-break-after:always}
+  .secao{page-break-inside:avoid}
+  .final{page-break-before:always}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{margin:0;size:A4}
+  html{margin:0}
+}
 </style></head><body>
 <div class="capa">
   <div class="capa-corpo">
@@ -131,7 +144,7 @@ strong{color:#1a3808}
     <p class="capa-sub">Personalizado para o seu objetivo</p>
     <div class="capa-sep"></div>
     <p class="capa-para">Elaborado com exclusividade para</p>
-    <div class="capa-nome">${d.nome}</div>
+    <div class="capa-nome">${nomeFormatado}</div>
     <div class="capa-stats">
       ${d.idade ? `<div class="capa-stat"><div class="val">${d.idade}</div><div class="key">Anos</div></div>` : ""}
       ${d.peso ? `<div class="capa-stat"><div class="val">${d.peso}&thinsp;kg</div><div class="key">Peso</div></div>` : ""}
@@ -149,19 +162,50 @@ strong{color:#1a3808}
   setTimeout(() => win.print(), 1400);
 }
 
+// ── CONTROLE DE USO POR EMAIL ─────────────────────────────────────────────
+async function verificarEmail(email) {
+  try {
+    const result = await window.storage.get(`used:${email}`);
+    return result ? true : false;
+  } catch {
+    return false;
+  }
+}
+
+async function registrarEmail(email) {
+  try {
+    await window.storage.set(`used:${email}`, "1");
+  } catch {}
+}
+
 // ── APP ──────────────────────────────────────────────────────────────────
 export default function App() {
   const [etapa, setEtapa] = useState(0);
   const [carregando, setCarregando] = useState(false);
+  const [verificando, setVerificando] = useState(false);
   const [conteudo, setConteudo] = useState(null);
   const [erro, setErro] = useState(null);
 
   const [f, setF] = useState({
-    nome: "", idade: "", peso: "", altura: "", sexo: "",
-    objetivo: "", nivel_atividade: "", rotina: "", habitos: "",
-    restricoes: "", preferencias: "", dificuldades: "",
+    nome: "", email: "", idade: "", peso: "", altura: "", sexo: "",
+    objetivo: "", nivel_atividade: "",
+    disponibilidade_exercicio: "", condicao_financeira: "", animo_exercicio: "",
+    rotina: "", habitos: "", restricoes: "", preferencias: "", dificuldades: "",
   });
   const s = k => v => setF(p => ({ ...p, [k]: v }));
+
+  const avancarEtapa1 = async () => {
+    if (!f.email) { setErro("Informe seu e-mail para continuar."); return; }
+    setVerificando(true);
+    setErro(null);
+    const jaUsou = await verificarEmail(f.email.toLowerCase().trim());
+    setVerificando(false);
+    if (jaUsou) {
+      setErro("Este e-mail já foi utilizado para gerar um guia. Cada e-mail tem direito a apenas um protocolo personalizado.");
+      return;
+    }
+    setEtapa(1);
+  };
 
   const gerar = async () => {
     setCarregando(true);
@@ -170,12 +214,13 @@ export default function App() {
       const res = await fetch("/api/gerar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(f),
+        body: JSON.stringify({ ...f, nome: toTitleCase(f.nome) }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
+      await registrarEmail(f.email.toLowerCase().trim());
       setConteudo(data.html);
-      setEtapa(5);
+      setEtapa(6);
     } catch {
       setErro("Não foi possível gerar o guia. Tente novamente.");
     }
@@ -195,7 +240,7 @@ export default function App() {
     background: "rgba(255,255,255,0.04)",
     border: `1px solid ${G.border}`,
     borderRadius: "18px", padding: "36px",
-    width: "100%", maxWidth: "600px",
+    width: "100%", maxWidth: "620px",
   };
 
   const btnP = {
@@ -212,27 +257,27 @@ export default function App() {
     cursor: "pointer", marginTop: "6px",
   };
 
-  const etapaLabels = ["Dados", "Objetivo", "Rotina", "Restrições", "Revisar"];
+  const etapaLabels = ["Dados", "Objetivo", "Exercício", "Rotina", "Restrições", "Revisar"];
 
   const progresso = (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "32px" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "32px", flexWrap: "wrap", gap: "4px" }}>
       {etapaLabels.map((l, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
             <div style={{
-              width: "30px", height: "30px", borderRadius: "50%",
+              width: "28px", height: "28px", borderRadius: "50%",
               background: i < etapa ? G.accent : i === etapa ? "rgba(127,194,53,.15)" : "rgba(255,255,255,.05)",
               border: i === etapa ? `2px solid ${G.accent}` : "2px solid transparent",
               color: i < etapa ? "#0a1a04" : i === etapa ? G.accent : "rgba(255,255,255,.2)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "12px", fontWeight: "700",
+              fontSize: "11px", fontWeight: "700",
             }}>
               {i < etapa ? "✓" : i + 1}
             </div>
             <span style={{ fontSize: "9px", color: i === etapa ? G.accent : G.muted, fontWeight: "600", whiteSpace: "nowrap" }}>{l}</span>
           </div>
           {i < etapaLabels.length - 1 && (
-            <div style={{ width: "32px", height: "1px", background: i < etapa ? G.accent : G.border, margin: "0 3px 16px" }} />
+            <div style={{ width: "24px", height: "1px", background: i < etapa ? G.accent : G.border, margin: "0 2px 16px" }} />
           )}
         </div>
       ))}
@@ -240,27 +285,49 @@ export default function App() {
   );
 
   const tit = (t, sub) => (
-    <div style={{ marginBottom: "24px" }}>
+    <div style={{ marginBottom: "20px" }}>
       <h2 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "3px" }}>{t}</h2>
       <p style={{ color: G.muted, fontSize: "12.5px" }}>{sub}</p>
     </div>
   );
 
+  const avisoDetalhes = (
+    <div style={{ background: "rgba(127,194,53,.08)", border: `1px solid rgba(127,194,53,.2)`, borderRadius: "10px", padding: "11px 14px", marginBottom: "20px", fontSize: "12.5px", color: "rgba(255,255,255,.55)", lineHeight: "1.6" }}>
+      💡 <strong style={{ color: G.accent }}>Dica importante:</strong> quanto mais detalhes você informar, mais preciso e personalizado será o seu guia nutricional.
+    </div>
+  );
+
+  const erroBox = erro && (
+    <div style={{ background: "rgba(255,60,60,.1)", border: "1px solid rgba(255,60,60,.25)", borderRadius: "8px", padding: "10px 14px", color: "#ff9090", fontSize: "12.5px", marginBottom: "14px", lineHeight: "1.6" }}>
+      {erro}
+    </div>
+  );
+
   const etapas = [
+    // 0 – Dados pessoais
     <>
-      {tit("Dados do Paciente", "Informações básicas para o protocolo")}
-      <F label="Nome completo"><Inp v={f.nome} onChange={s("nome")} ph="Nome completo" /></F>
+      {tit("Seus Dados", "Informações básicas para o protocolo")}
+      {avisoDetalhes}
+      <F label="Nome completo"><Inp v={f.nome} onChange={s("nome")} ph="Seu nome completo" /></F>
+      <F label="E-mail" hint="Cada e-mail tem direito a apenas um guia personalizado">
+        <Inp v={f.email} onChange={s("email")} ph="seu@email.com" type="email" />
+      </F>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
         <F label="Idade"><Inp v={f.idade} onChange={s("idade")} ph="Ex: 28" type="number" /></F>
         <F label="Sexo"><Sel v={f.sexo} onChange={s("sexo")} opts={[{ v: "Feminino", l: "Feminino" }, { v: "Masculino", l: "Masculino" }]} /></F>
         <F label="Peso (kg)"><Inp v={f.peso} onChange={s("peso")} ph="Ex: 65" type="number" /></F>
         <F label="Altura (cm)"><Inp v={f.altura} onChange={s("altura")} ph="Ex: 165" type="number" /></F>
       </div>
-      <button style={btnP} onClick={() => setEtapa(1)}>Continuar →</button>
+      {erroBox}
+      <button style={{ ...btnP, opacity: verificando ? .65 : 1 }} onClick={avancarEtapa1} disabled={verificando}>
+        {verificando ? "Verificando..." : "Continuar →"}
+      </button>
     </>,
 
+    // 1 – Objetivo
     <>
-      {tit("Objetivo e Atividade Física", "O que a pessoa quer alcançar")}
+      {tit("Objetivo e Atividade", "O que você quer alcançar")}
+      {avisoDetalhes}
       <F label="Objetivo principal">
         <Sel v={f.objetivo} onChange={s("objetivo")} opts={[
           { v: "Emagrecimento e redução de gordura corporal", l: "Emagrecimento / Perda de gordura" },
@@ -271,12 +338,12 @@ export default function App() {
           { v: "Performance esportiva e rendimento", l: "Performance esportiva" },
         ]} />
       </F>
-      <F label="Nível de atividade física">
+      <F label="Nível de atividade física atual">
         <Sel v={f.nivel_atividade} onChange={s("nivel_atividade")} opts={[
           { v: "Sedentário, sem exercícios regulares", l: "Sedentário (sem exercícios)" },
-          { v: "Levemente ativo, 1 a 2 treinos por semana", l: "Leve (1-2x por semana)" },
-          { v: "Moderadamente ativo, 3 a 4 treinos por semana", l: "Moderado (3-4x por semana)" },
-          { v: "Muito ativo, 5 a 6 treinos por semana", l: "Muito ativo (5-6x por semana)" },
+          { v: "Levemente ativo, 1 a 2 vezes por semana", l: "Leve (1-2x por semana)" },
+          { v: "Moderadamente ativo, 3 a 4 vezes por semana", l: "Moderado (3-4x por semana)" },
+          { v: "Muito ativo, 5 a 6 vezes por semana", l: "Muito ativo (5-6x por semana)" },
           { v: "Extremamente ativo, atleta ou treino diário intenso", l: "Atleta / treino diário" },
         ]} />
       </F>
@@ -286,13 +353,31 @@ export default function App() {
       </div>
     </>,
 
+    // 2 – Exercício
     <>
-      {tit("Rotina e Hábitos", "Quanto mais detalhes, mais preciso o guia")}
-      <F label="Rotina diária (trabalho, horários, treino)">
-        <Txt v={f.rotina} onChange={s("rotina")} ph="Ex: Trabalho das 8h às 17h, treino às 7h. Chego em casa às 18h..." />
+      {tit("Exercícios & Estilo de Vida", "Para montar o treino certo para você")}
+      {avisoDetalhes}
+      <F label="Disponibilidade para exercícios" hint="Quantos dias por semana e quanto tempo você consegue dedicar?">
+        <Txt v={f.disponibilidade_exercicio} onChange={s("disponibilidade_exercicio")} rows={2}
+          ph="Ex: Tenho 3 dias livres por semana, uns 45 minutos por sessão. Manhãs de segunda, quarta e sexta." />
       </F>
-      <F label="Hábitos alimentares atuais">
-        <Txt v={f.habitos} onChange={s("habitos")} ph="Ex: Pulo o café da manhã, almoço fora, como muito à noite..." />
+      <F label="Condição financeira para exercícios" hint="Academia, equipamentos em casa, espaço ao ar livre...">
+        <Sel v={f.condicao_financeira} onChange={s("condicao_financeira")} opts={[
+          { v: "Tenho academia disponível e posso pagar mensalidade", l: "Tenho academia" },
+          { v: "Prefiro treinar em casa, tenho alguns equipamentos", l: "Treino em casa com equipamentos" },
+          { v: "Treino em casa sem equipamentos, apenas peso corporal", l: "Casa sem equipamentos" },
+          { v: "Prefiro atividades ao ar livre (caminhada, corrida, bike)", l: "Ao ar livre" },
+          { v: "Sem condições financeiras para academia ou equipamentos agora", l: "Sem condições financeiras agora" },
+        ]} />
+      </F>
+      <F label="Ânimo e disposição para exercícios" hint="Seja honesto — isso ajuda a montar algo que você vai de fato seguir">
+        <Sel v={f.animo_exercicio} onChange={s("animo_exercicio")} opts={[
+          { v: "Muito motivado, quero treinar com intensidade", l: "Muito motivado 🔥" },
+          { v: "Motivado, mas quero começar devagar e evoluir", l: "Motivado, mas prefiro começar leve" },
+          { v: "Pouco animado, preciso de algo simples e prático", l: "Pouco animado — precisa ser simples" },
+          { v: "Não gosto de academia, prefiro esportes ou atividades divertidas", l: "Prefiro esportes ou atividades divertidas" },
+          { v: "Tenho dificuldade de manter rotina de exercícios", l: "Dificuldade em manter rotina" },
+        ]} />
       </F>
       <div style={{ display: "flex", gap: "10px" }}>
         <button style={btnS} onClick={() => setEtapa(1)}>←</button>
@@ -300,64 +385,91 @@ export default function App() {
       </div>
     </>,
 
+    // 3 – Rotina
     <>
-      {tit("Restrições e Dificuldades", "Para garantir segurança e adesão ao plano")}
-      <F label="Restrições alimentares ou alergias">
-        <Txt v={f.restricoes} onChange={s("restricoes")} rows={2} ph="Ex: Intolerante à lactose, não come carne vermelha. Ou 'Nenhuma'." />
+      {tit("Rotina e Hábitos", "Para adaptar o plano à sua realidade")}
+      {avisoDetalhes}
+      <F label="Rotina diária" hint="Trabalho, horários, família, compromissos — tudo conta">
+        <Txt v={f.rotina} onChange={s("rotina")} rows={3}
+          ph="Ex: Trabalho das 8h às 17h, tenho dois filhos, chego em casa às 18h30. Fins de semana são mais livres." />
       </F>
-      <F label="Preferências alimentares">
-        <Txt v={f.preferencias} onChange={s("preferencias")} rows={2} ph="Ex: Ama frango, ovos e frutas. Prefere comida caseira. Não gosta de peixe." />
-      </F>
-      <F label="Principais dificuldades com alimentação">
-        <Txt v={f.dificuldades} onChange={s("dificuldades")} rows={3} ph="Ex: Ansiedade à noite, compulsão por doces, sem tempo para cozinhar..." />
+      <F label="Hábitos alimentares atuais" hint="Como você come hoje, sem filtro">
+        <Txt v={f.habitos} onChange={s("habitos")} rows={3}
+          ph="Ex: Pulo o café da manhã, almoço no restaurante perto do trabalho, como bastante à noite e bebo pouca água." />
       </F>
       <div style={{ display: "flex", gap: "10px" }}>
         <button style={btnS} onClick={() => setEtapa(2)}>←</button>
-        <button style={{ ...btnP, flex: 1, marginTop: 0 }} onClick={() => setEtapa(4)}>Revisar →</button>
+        <button style={{ ...btnP, flex: 1, marginTop: 0 }} onClick={() => setEtapa(4)}>Continuar →</button>
       </div>
     </>,
 
+    // 4 – Restrições
     <>
-      {tit("Revisão dos Dados", "Confirme antes de gerar")}
+      {tit("Restrições e Preferências", "Para garantir um plano seguro e que você vai seguir")}
+      {avisoDetalhes}
+      <F label="Restrições alimentares ou alergias">
+        <Txt v={f.restricoes} onChange={s("restricoes")} rows={2}
+          ph="Ex: Intolerante à lactose, alérgico a amendoim, não como carne vermelha. Ou escreva 'Nenhuma'." />
+      </F>
+      <F label="Preferências alimentares">
+        <Txt v={f.preferencias} onChange={s("preferencias")} rows={2}
+          ph="Ex: Amo frango, ovos e arroz. Prefiro comida caseira. Não gosto de peixe nem de fígado." />
+      </F>
+      <F label="Principais dificuldades com alimentação e saúde" hint="Seja específico — quanto mais detalhar, mais certeiro será o guia">
+        <Txt v={f.dificuldades} onChange={s("dificuldades")} rows={3}
+          ph="Ex: Ansiedade à noite, compulsão por doces, falta de tempo para cozinhar, como mal no fim de semana, bebo bastante nos finais de semana..." />
+      </F>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <button style={btnS} onClick={() => setEtapa(3)}>←</button>
+        <button style={{ ...btnP, flex: 1, marginTop: 0 }} onClick={() => setEtapa(5)}>Revisar →</button>
+      </div>
+    </>,
+
+    // 5 – Revisar
+    <>
+      {tit("Revisão Final", "Confirme antes de gerar")}
       <div style={{ marginBottom: "20px" }}>
         {[
-          ["Nome", f.nome], ["Sexo / Idade", `${f.sexo}, ${f.idade} anos`],
+          ["Nome", toTitleCase(f.nome)], ["E-mail", f.email],
+          ["Sexo / Idade", `${f.sexo}, ${f.idade} anos`],
           ["Peso / Altura", `${f.peso} kg · ${f.altura} cm`],
           ["Objetivo", f.objetivo], ["Atividade", f.nivel_atividade],
+          ["Disponibilidade", f.disponibilidade_exercicio],
+          ["Condição p/ exercício", f.condicao_financeira],
+          ["Ânimo p/ exercício", f.animo_exercicio],
           ["Rotina", f.rotina], ["Hábitos", f.habitos],
           ["Restrições", f.restricoes || "Nenhuma"],
           ["Preferências", f.preferencias], ["Dificuldades", f.dificuldades],
         ].filter(([, v]) => v).map(([k, v]) => (
           <div key={k} style={{ display: "flex", gap: "14px", padding: "8px 0", borderBottom: `1px solid ${G.border}`, fontSize: "12.5px" }}>
-            <span style={{ color: G.muted, fontWeight: "600", minWidth: "100px", flexShrink: 0 }}>{k}</span>
+            <span style={{ color: G.muted, fontWeight: "600", minWidth: "110px", flexShrink: 0 }}>{k}</span>
             <span style={{ color: G.text, wordBreak: "break-word", lineHeight: "1.5" }}>{v}</span>
           </div>
         ))}
       </div>
-      {erro && (
-        <div style={{ background: "rgba(255,60,60,.1)", border: "1px solid rgba(255,60,60,.25)", borderRadius: "8px", padding: "10px 14px", color: "#ff9090", fontSize: "12.5px", marginBottom: "14px" }}>
-          {erro}
-        </div>
-      )}
+      {erroBox}
       <div style={{ background: "rgba(127,194,53,.07)", border: "1px solid rgba(127,194,53,.18)", borderRadius: "9px", padding: "12px 15px", marginBottom: "16px", fontSize: "12.5px", color: G.muted, lineHeight: "1.7" }}>
-        O guia completo será elaborado e formatado. Isso pode levar até <strong style={{ color: G.text }}>60 segundos</strong>.
+        ⚠️ Após gerar, este e-mail não poderá ser usado novamente. O guia será elaborado em até <strong style={{ color: G.text }}>60 segundos</strong>.
       </div>
       <button style={{ ...btnP, opacity: carregando ? .65 : 1 }} onClick={gerar} disabled={carregando}>
         {carregando
           ? <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
               <span style={{ display: "inline-block", width: "14px", height: "14px", border: "2px solid #0a1a04", borderTopColor: "transparent", borderRadius: "50%", animation: "spin .8s linear infinite" }} />
-              Elaborando protocolo personalizado...
+              Elaborando seu protocolo personalizado...
             </span>
-          : "Gerar Guia Nutricional Completo"}
+          : "Gerar Meu Guia Nutricional"}
       </button>
-      <button style={{ ...btnS, width: "100%", textAlign: "center" }} onClick={() => setEtapa(3)}>← Editar dados</button>
+      <button style={{ ...btnS, width: "100%", textAlign: "center" }} onClick={() => setEtapa(4)}>← Editar dados</button>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </>,
 
+    // 6 – Pronto
     <>
       <div style={{ textAlign: "center", padding: "8px 0 24px" }}>
         <div style={{ width: "52px", height: "52px", background: "rgba(127,194,53,.12)", border: `1.5px solid ${G.accent}`, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", margin: "0 auto 18px" }}>✓</div>
-        <h2 style={{ fontSize: "20px", fontWeight: "700", color: G.accent, marginBottom: "6px" }}>Guia de {f.nome} está pronto</h2>
+        <h2 style={{ fontSize: "20px", fontWeight: "700", color: G.accent, marginBottom: "6px" }}>
+          Seu guia está pronto, {toTitleCase(f.nome.split(" ")[0])}!
+        </h2>
         <p style={{ color: G.muted, fontSize: "13px" }}>Clique em baixar para abrir o PDF formatado</p>
       </div>
       <div style={{ background: "rgba(255,255,255,.03)", border: `1px solid ${G.border}`, borderRadius: "10px", padding: "16px 18px", marginBottom: "22px", fontSize: "12.5px", color: G.muted, lineHeight: "1.85" }}>
@@ -367,24 +479,20 @@ export default function App() {
         3. Clique em Salvar
       </div>
       <button style={btnP} onClick={() => abrirPDF(conteudo, f)}>⬇ Baixar PDF</button>
-      <button style={{ ...btnS, width: "100%", textAlign: "center", marginTop: "10px" }}
-        onClick={() => { setF({ nome: "", idade: "", peso: "", altura: "", sexo: "", objetivo: "", nivel_atividade: "", rotina: "", habitos: "", restricoes: "", preferencias: "", dificuldades: "" }); setConteudo(null); setEtapa(0); }}>
-        Gerar para outro paciente
-      </button>
     </>,
   ];
 
   return (
     <div style={wrap}>
-      <div style={{ textAlign: "center", marginBottom: "40px", maxWidth: "460px" }}>
+      <div style={{ textAlign: "center", marginBottom: "40px", maxWidth: "500px" }}>
         <div style={{ width: "32px", height: "1.5px", background: G.accent, margin: "0 auto 18px" }} />
         <h1 style={{ fontSize: "clamp(24px,5vw,34px)", fontWeight: "800", color: "#f4f1ea", letterSpacing: "-.025em", lineHeight: 1.15, marginBottom: "9px" }}>
           Protocolo Nutricional
         </h1>
-        <p style={{ color: G.muted, fontSize: "13px" }}>Preencha os dados e gere o guia completo em PDF</p>
+        <p style={{ color: G.muted, fontSize: "13px" }}>Preencha os dados abaixo para receber seu guia completo em PDF</p>
       </div>
       <div style={cartao}>
-        {etapa < 5 && progresso}
+        {etapa < 6 && progresso}
         {etapas[etapa]}
       </div>
     </div>
