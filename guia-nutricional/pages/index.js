@@ -220,13 +220,14 @@ nav{
 
 /* ══ TROCA PELA URL DO SEU VÍDEO ══ */
 .video-wrap{
-  max-width:720px;margin:0 auto 24px;
+  max-width:380px;margin:0 auto 24px;
   position:relative;
   background:rgba(0,0,0,0.4);
   border:1px solid rgba(245,240,224,0.07);
-  aspect-ratio:16/9;
+  aspect-ratio:9/16;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
+  border-radius:16px;
 }
 
 /* SE FOR IFRAME YOUTUBE — descomente e cole sua URL: */
