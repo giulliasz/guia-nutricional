@@ -34,7 +34,6 @@ CLASSES:
 - Dica: <div class="dica"><span class="dica-icone">💧</span><div class="dica-texto"><strong>Título</strong>Texto</div></div>
 - Resumo: <div class="resumo-grid"><div class="resumo-card"><div class="rc-label">META</div><div class="rc-val">2100 kcal</div><div class="rc-desc">por dia</div></div></div>
 - Regra: <div class="regra"><span class="regra-n">1</span><span>texto</span></div>
-- Final: <div class="final"><div class="final-sep"></div><h2>título</h2><p>texto</p><div class="final-ass">Com carinho,</div><div class="final-cargo">Seu Nutricionista</div></div>
 
 GERE ESTAS 11 SEÇÕES:
 
@@ -58,9 +57,10 @@ GERE ESTAS 11 SEÇÕES:
 
 10 — RESUMO RÁPIDO: resumo-grid com 4 cards: Meta Calórica / Proteína Diária / Estratégia / Regra de Ouro. Depois 3 regras com classe regra.
 
-11 — MENSAGEM FINAL: Use div class="final". 3-4 parágrafos emocionalmente verdadeiros. Mencione ${d.nome}. Psicologia de identidade. Termine com final-ass e final-cargo.
+11 — MENSAGEM FINAL OBRIGATÓRIA: Use EXATAMENTE esta estrutura e NÃO deixe incompleta:
+<div class="final"><div class="final-sep"></div><h2>Título motivador para ${d.nome}</h2><p>Parágrafo 1 curto sobre a jornada específica de ${d.nome}.</p><p>Parágrafo 2 curto sobre identidade: quem ${d.nome} está se tornando.</p><p>Parágrafo 3 curto reforçando consistência sem promessas milagrosas.</p><div class="final-ass">Com carinho e dedicação,</div><div class="final-cargo">Seu Nutricionista</div></div>
 
-REGRAS: Calcule com precisão. Cite ${d.nome} naturalmente. NUNCA mencione IA ou tecnologia. ZERO genérico. Retorne APENAS HTML puro, sem markdown, sem backticks.`;
+REGRAS ABSOLUTAS: Calcule com precisão. Cite ${d.nome} naturalmente. NUNCA mencione IA ou tecnologia. ZERO genérico. A seção 11 DEVE terminar com final-ass e final-cargo. Retorne APENAS HTML puro, sem markdown, sem backticks.`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -71,8 +71,8 @@ REGRAS: Calcule com precisão. Cite ${d.nome} naturalmente. NUNCA mencione IA ou
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-opus-4-5",
-        max_tokens: 8000,
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 10000,
         messages: [{ role: "user", content: prompt }],
       }),
     });
