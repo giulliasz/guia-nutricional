@@ -604,11 +604,10 @@ footer{
     <p class="vsub" style="margin-top:8px;">Não prometemos milagre. Prometemos método.</p>
   </div>
   <div style="max-width:380px;margin:0 auto 24px;">
-    <div style="padding:189.35% 0 0 0;position:relative;border-radius:16px;overflow:hidden;">
-      <iframe src="https://player.vimeo.com/video/1181729866?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="IMG_8418"></iframe>
+    <div style="padding:177.78% 0 0 0;position:relative;border-radius:16px;overflow:hidden;">
+      <iframe src="https://www.youtube.com/embed/rh52RK4kk2A?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
     </div>
   </div>
-  <script src="https://player.vimeo.com/api/player.js"></script>
   <p class="video-legenda">"Resultados reais, de pessoas reais — com direcionamento certo."</p>
 </section>
 
