@@ -1,7 +1,8 @@
 export default function Home() {
   if (typeof window !== 'undefined') {
     setTimeout(() => {
-      // Scroll reveal
+
+      // ── SCROLL REVEAL ──
       const obs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
           if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
@@ -9,40 +10,128 @@ export default function Home() {
       },{threshold:0.07});
       document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-      // Funções do popup expostas globalmente
+      // ── POPUP LEADS ──
       window.fecharPopup = function(){
         var popup = document.getElementById('leadPopup');
         if(popup) popup.classList.remove('show');
       };
-
       window.irParaForms = function(){
         window.fecharPopup();
         window.open('https://docs.google.com/forms/d/e/1FAIpQLSd2LCxRtbzcjeteA3w7EB6yT5WYtLNOoH9zY_eBkawZJ-A03w/viewform', '_blank');
       };
-
       window.irParaPagamento = function(){
         window.fecharPopup();
         window.location.href = 'https://pay.kiwify.com.br/y8GYnfg';
       };
-
       window.abrirPopup = function(e){
         if(e) e.preventDefault();
         var popup = document.getElementById('leadPopup');
         if(popup) popup.classList.add('show');
       };
-
-      // Intercepta botões Kiwify
       function initPopup(){
         document.querySelectorAll('a[href="https://pay.kiwify.com.br/y8GYnfg"]').forEach(function(btn){
-          btn.onclick = function(e){
-            e.preventDefault();
-            window.abrirPopup(e);
-          };
+          btn.onclick = function(e){ e.preventDefault(); window.abrirPopup(e); };
         });
       }
       initPopup();
       setTimeout(initPopup, 1000);
       setTimeout(initPopup, 2500);
+
+      // ── CHAT IA ──
+      var chatHistorico = [];
+      var chatEnviando = false;
+
+      window.toggleChat = function(){
+        var win = document.getElementById('chatWindow');
+        var btn = document.getElementById('chatBtn');
+        if(!win) return;
+        var aberto = win.classList.toggle('open');
+        if(btn) btn.textContent = aberto ? '×' : '💬';
+        if(aberto){ var inp = document.getElementById('chatInput'); if(inp) inp.focus(); }
+      };
+
+      window.addChatMsg = function(role, text){
+        var msgs = document.getElementById('chatMsgs');
+        if(!msgs) return;
+        var div = document.createElement('div');
+        div.className = 'cmsg ' + role;
+        div.innerHTML = (role === 'bot' ? '<div class="cmsg-av">🥗</div>' : '<div class="cmsg-av">👤</div>') +
+          '<div class="cmsg-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+        // Remove typing
+        var typing = document.getElementById('chatTyping');
+        if(typing) typing.className = 'chat-typing';
+      };
+
+      window.showTyping = function(show){
+        var t = document.getElementById('chatTyping');
+        if(t) t.className = 'chat-typing' + (show ? ' show' : '');
+        if(show){ var msgs = document.getElementById('chatMsgs'); if(msgs) msgs.scrollTop = 99999; }
+      };
+
+      window.enviarChat = async function(){
+        var input = document.getElementById('chatInput');
+        if(!input) return;
+        var texto = input.value.trim();
+        if(!texto || chatEnviando) return;
+
+        var sugs = document.getElementById('chatSugs');
+        if(sugs) sugs.style.display = 'none';
+
+        input.value = '';
+        input.style.height = 'auto';
+        window.addChatMsg('user', texto);
+        chatHistorico.push({role:'user', content:texto});
+
+        chatEnviando = true;
+        var sendBtn = document.getElementById('chatSend');
+        if(sendBtn) sendBtn.disabled = true;
+        window.showTyping(true);
+
+        try {
+          var res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'anthropic-dangerous-direct-browser-access': 'true'
+            },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-20250514',
+              max_tokens: 1000,
+              system: 'Você é o assistente de suporte do Guia Nutricional Personalizado. Responda em português brasileiro, de forma simples, humana e acolhedora. Seja direto e objetivo — respostas curtas de 2 a 4 linhas. O produto é um guia nutricional + treino em PDF por R$20, personalizado com base num questionário. A pessoa paga, responde o questionário e baixa o PDF na hora. Tem 7 dias de garantia. Nunca prometa resultados específicos. Se a pergunta for muito clínica, oriente a buscar um profissional.',
+              messages: chatHistorico
+            })
+          });
+          var data = await res.json();
+          var resposta = data.content && data.content[0] ? data.content[0].text : 'Desculpe, tive um problema. Tente novamente!';
+          chatHistorico.push({role:'assistant', content:resposta});
+          window.addChatMsg('bot', resposta);
+        } catch(e) {
+          window.showTyping(false);
+          window.addChatMsg('bot', 'Ops, problema de conexão. Tente novamente em instantes! 🙏');
+        }
+
+        chatEnviando = false;
+        if(sendBtn) sendBtn.disabled = false;
+      };
+
+      window.usarSug = function(btn){
+        var input = document.getElementById('chatInput');
+        if(input){ input.value = btn.textContent; window.enviarChat(); }
+      };
+
+      // Enter para enviar no chat
+      var chatInput = document.getElementById('chatInput');
+      if(chatInput){
+        chatInput.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); window.enviarChat(); }
+        });
+        chatInput.addEventListener('input', function(){
+          this.style.height = 'auto';
+          this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+        });
+      }
 
     }, 200);
   }
