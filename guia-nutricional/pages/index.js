@@ -833,6 +833,355 @@ const obs=new IntersectionObserver((entries)=>{
 },{threshold:0.07});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
+
+<!-- ══ CHAT FLUTUANTE ══ -->
+<style>
+.chat-float-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  z-index: 300;
+  background: var(--laranja);
+  color: var(--v1);
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(232,147,74,0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+}
+.chat-float-btn:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(232,147,74,0.65); }
+
+.chat-float-label {
+  position: fixed;
+  bottom: 152px;
+  right: 20px;
+  z-index: 300;
+  background: var(--v1);
+  border: 1px solid var(--bl);
+  color: rgba(245,240,224,0.7);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: min(380px, calc(100vw - 32px));
+  height: 520px;
+  z-index: 301;
+  background: #0d1a0f;
+  border: 1px solid rgba(232,147,74,0.2);
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chat-window.open { display: flex; }
+
+.chat-header {
+  background: var(--v3);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(232,147,74,0.15);
+  flex-shrink: 0;
+}
+
+.chat-header-av {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--laranja);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+
+.chat-header-info h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; font-weight: 600;
+  color: var(--creme); margin-bottom: 1px;
+}
+
+.chat-header-info span {
+  font-size: 10px; color: #4ade80;
+  letter-spacing: 1px;
+}
+
+.chat-close {
+  margin-left: auto;
+  background: none; border: none;
+  color: rgba(245,240,224,0.4);
+  font-size: 20px; cursor: pointer;
+  line-height: 1;
+}
+.chat-close:hover { color: var(--creme); }
+
+.chat-msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-msgs::-webkit-scrollbar { width: 3px; }
+.chat-msgs::-webkit-scrollbar-thumb { background: rgba(232,147,74,0.2); }
+
+.cmsg {
+  display: flex; gap: 8px; align-items: flex-end;
+  animation: fadeUp 0.3s ease both;
+}
+
+.cmsg.user { flex-direction: row-reverse; }
+
+.cmsg-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+
+.cmsg.bot .cmsg-av { background: var(--v3); }
+.cmsg.user .cmsg-av { background: rgba(232,147,74,0.2); border: 1px solid var(--bl); }
+
+.cmsg-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.cmsg.bot .cmsg-bubble {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: rgba(245,240,224,0.85);
+  border-radius: 2px 10px 10px 2px;
+}
+
+.cmsg.user .cmsg-bubble {
+  background: var(--v3);
+  color: var(--creme);
+  border-radius: 10px 2px 2px 10px;
+}
+
+.chat-typing {
+  display: none;
+  gap: 8px; align-items: flex-end;
+}
+.chat-typing.show { display: flex; }
+.chat-typing-bubble {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 12px 16px;
+  border-radius: 2px 10px 10px 2px;
+  display: flex; gap: 4px;
+}
+.chat-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--laranja2);
+  animation: typingDot 1.2s ease-in-out infinite;
+}
+.chat-dot:nth-child(2) { animation-delay: 0.2s; }
+.chat-dot:nth-child(3) { animation-delay: 0.4s; }
+
+.chat-sugs {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 0 16px 8px;
+  flex-shrink: 0;
+}
+
+.chat-sug {
+  background: transparent;
+  border: 1px solid rgba(232,147,74,0.2);
+  color: rgba(245,240,224,0.55);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  padding: 5px 12px;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.chat-sug:hover { border-color: var(--laranja); color: var(--laranja3); }
+
+.chat-input-row {
+  display: flex; gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  flex-shrink: 0;
+}
+
+.chat-input {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--creme);
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  padding: 10px 14px;
+  outline: none;
+  resize: none;
+  min-height: 42px; max-height: 80px;
+  line-height: 1.5;
+  border-radius: 2px;
+}
+.chat-input::placeholder { color: rgba(245,240,224,0.25); }
+.chat-input:focus { border-color: rgba(232,147,74,0.3); }
+
+.chat-send {
+  width: 42px; height: 42px;
+  background: var(--laranja);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--v1);
+  flex-shrink: 0;
+  transition: background 0.2s;
+  border-radius: 2px;
+}
+.chat-send:hover { background: var(--laranja2); }
+.chat-send:disabled { background: #333; cursor: not-allowed; opacity: 0.4; }
+
+@keyframes typingDot {
+  0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+</style>
+
+<!-- Label -->
+<div class="chat-float-label">Precisa de ajuda? 💬</div>
+
+<!-- Botão flutuante -->
+<button class="chat-float-btn" onclick="toggleChat()" id="chatBtn">💬</button>
+
+<!-- Janela do chat -->
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-header-av">🥗</div>
+    <div class="chat-header-info">
+      <h4>Suporte Nutricional</h4>
+      <span>● Online agora</span>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">×</button>
+  </div>
+
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="cmsg bot">
+      <div class="cmsg-av">🥗</div>
+      <div class="cmsg-bubble">Olá! 👋 Pode me perguntar qualquer coisa sobre o guia nutricional. Estou aqui para ajudar!</div>
+    </div>
+  </div>
+
+  <div class="chat-typing" id="chatTyping">
+    <div class="cmsg-av" style="width:28px;height:28px;border-radius:50%;background:var(--v3);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">🥗</div>
+    <div class="chat-typing-bubble">
+      <div class="chat-dot"></div>
+      <div class="chat-dot"></div>
+      <div class="chat-dot"></div>
+    </div>
+  </div>
+
+  <div class="chat-sugs" id="chatSugs">
+    <button class="chat-sug" onclick="usarSug(this)">O que está incluso?</button>
+    <button class="chat-sug" onclick="usarSug(this)">Como recebo o PDF?</button>
+    <button class="chat-sug" onclick="usarSug(this)">Tem garantia?</button>
+    <button class="chat-sug" onclick="usarSug(this)">Vale para emagrecer?</button>
+  </div>
+
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chatInput" placeholder="Digite sua dúvida..." rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarChat()}"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
+    <button class="chat-send" id="chatSend" onclick="enviarChat()">➤</button>
+  </div>
+</div>
+
+<script>
+var chatHistorico = [];
+var chatEnviando = false;
+var chatAberto = false;
+
+var CHAT_SYSTEM = "Você é o assistente de suporte do Guia Nutricional Personalizado. Responda em português brasileiro, de forma simples, humana e acolhedora. Seja direto e objetivo — respostas curtas de 2 a 4 linhas. O produto é um guia nutricional + treino em PDF por R$20, personalizado com base num questionário. A pessoa paga, responde o questionário e baixa o PDF na hora. Tem 7 dias de garantia. Nunca prometa resultados específicos. Se a pergunta for muito clínica, oriente a buscar um profissional.";
+
+function toggleChat() {
+  chatAberto = !chatAberto;
+  document.getElementById('chatWindow').classList.toggle('open', chatAberto);
+  document.getElementById('chatBtn').textContent = chatAberto ? '×' : '💬';
+  if (chatAberto) document.getElementById('chatInput').focus();
+}
+
+function addChatMsg(role, text) {
+  var msgs = document.getElementById('chatMsgs');
+  var div = document.createElement('div');
+  div.className = 'cmsg ' + role;
+  div.innerHTML = (role === 'bot' ? '<div class="cmsg-av">🥗</div>' : '<div class="cmsg-av">👤</div>') +
+    '<div class="cmsg-bubble">' + text.replace(/\\n/g,'<br>') + '</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping(show) {
+  document.getElementById('chatTyping').className = 'chat-typing' + (show ? ' show' : '');
+  if (show) document.getElementById('chatMsgs').scrollTop = 99999;
+}
+
+async function enviarChat() {
+  var input = document.getElementById('chatInput');
+  var texto = input.value.trim();
+  if (!texto || chatEnviando) return;
+
+  document.getElementById('chatSugs').style.display = 'none';
+  input.value = '';
+  input.style.height = 'auto';
+  addChatMsg('user', texto);
+  chatHistorico.push({role:'user', content:texto});
+
+  chatEnviando = true;
+  document.getElementById('chatSend').disabled = true;
+  showTyping(true);
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: CHAT_SYSTEM,
+        messages: chatHistorico
+      })
+    });
+    var data = await res.json();
+    var resposta = data.content && data.content[0] ? data.content[0].text : 'Desculpe, tive um problema. Tente novamente!';
+    chatHistorico.push({role:'assistant', content:resposta});
+    showTyping(false);
+    addChatMsg('bot', resposta);
+  } catch(e) {
+    showTyping(false);
+    addChatMsg('bot', 'Ops, problema de conexão. Tente novamente em instantes! 🙏');
+  }
+
+  chatEnviando = false;
+  document.getElementById('chatSend').disabled = false;
+}
+
+function usarSug(btn) {
+  document.getElementById('chatInput').value = btn.textContent;
+  enviarChat();
+}
+</script>
+
 </body>
 </html>
 ` }} />
