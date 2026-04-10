@@ -713,7 +713,7 @@ footer{
         <img src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/trudee-wiltshire-dupe.jpeg" alt="Alimentação saudável" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"/>
       </div>
       <div style="overflow:hidden;aspect-ratio:4/5;position:relative;">
-        <video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block;" src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/8171423-uhd_3840_2160_25fps.mp4"></video>
+        <img src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/bheatriz-siqueira-dupe.jpeg" alt="Resultado real" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"/>
       </div>
       <div style="overflow:hidden;aspect-ratio:4/5;position:relative;">
         <img src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/alina-valentina-dupe.jpeg" alt="Resultado real" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"/>
