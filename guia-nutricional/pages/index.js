@@ -53,21 +53,21 @@ export default function Home() {
       window.addChatMsg = function(role, text){
         var msgs = document.getElementById('chatMsgs');
         if(!msgs) return;
+        var typing = document.getElementById('chatTyping');
+        if(typing) typing.className = 'chat-typing';
         var div = document.createElement('div');
         div.className = 'cmsg ' + role;
         div.innerHTML = (role === 'bot' ? '<div class="cmsg-av">🥗</div>' : '<div class="cmsg-av">👤</div>') +
           '<div class="cmsg-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
         msgs.appendChild(div);
         msgs.scrollTop = msgs.scrollHeight;
-        // Remove typing
-        var typing = document.getElementById('chatTyping');
-        if(typing) typing.className = 'chat-typing';
       };
 
       window.showTyping = function(show){
         var t = document.getElementById('chatTyping');
         if(t) t.className = 'chat-typing' + (show ? ' show' : '');
-        if(show){ var msgs = document.getElementById('chatMsgs'); if(msgs) msgs.scrollTop = 99999; }
+        var msgs = document.getElementById('chatMsgs');
+        if(show && msgs) msgs.scrollTop = 99999;
       };
 
       window.enviarChat = async function(){
@@ -78,7 +78,6 @@ export default function Home() {
 
         var sugs = document.getElementById('chatSugs');
         if(sugs) sugs.style.display = 'none';
-
         input.value = '';
         input.style.height = 'auto';
         window.addChatMsg('user', texto);
@@ -90,21 +89,13 @@ export default function Home() {
         window.showTyping(true);
 
         try {
-          var res = await fetch('https://api.anthropic.com/v1/messages', {
+          var res = await fetch('/api/chat', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'anthropic-dangerous-direct-browser-access': 'true'
-            },
-            body: JSON.stringify({
-              model: 'claude-sonnet-4-20250514',
-              max_tokens: 1000,
-              system: 'Você é o assistente de suporte do Guia Nutricional Personalizado. Responda em português brasileiro, de forma simples, humana e acolhedora. Seja direto e objetivo — respostas curtas de 2 a 4 linhas. O produto é um guia nutricional + treino em PDF por R$20, personalizado com base num questionário. A pessoa paga, responde o questionário e baixa o PDF na hora. Tem 7 dias de garantia. Nunca prometa resultados específicos. Se a pergunta for muito clínica, oriente a buscar um profissional.',
-              messages: chatHistorico
-            })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ messages: chatHistorico })
           });
           var data = await res.json();
-          var resposta = data.content && data.content[0] ? data.content[0].text : 'Desculpe, tive um problema. Tente novamente!';
+          var resposta = data.response || 'Desculpe, tive um problema. Tente novamente!';
           chatHistorico.push({role:'assistant', content:resposta});
           window.addChatMsg('bot', resposta);
         } catch(e) {
@@ -121,7 +112,6 @@ export default function Home() {
         if(input){ input.value = btn.textContent; window.enviarChat(); }
       };
 
-      // Enter para enviar no chat
       var chatInput = document.getElementById('chatInput');
       if(chatInput){
         chatInput.addEventListener('keydown', function(e){
