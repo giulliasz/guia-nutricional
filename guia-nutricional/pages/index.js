@@ -557,8 +557,8 @@ footer{
 </nav>
 
 <!-- ══ HERO ══ -->
-<section class="hero">
-  <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.35;" src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/han-nilla-dupe.mov"></video>
+<section class="hero" style="background-image:url(https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/pexels-wolfart-32383599.jpg);background-size:cover;background-position:center;">
+  <div style="position:absolute;inset:0;background:rgba(8,20,10,0.72);z-index:0;"></div>
   <div class="hero-badge">Protocolo Nutricional Exclusivo</div>
   <h1>
     <span class="l1">Guia</span>
