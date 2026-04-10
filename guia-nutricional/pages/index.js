@@ -567,9 +567,9 @@ footer{
   </h1>
   <div class="hero-div"></div>
   <p class="hero-sub">
-    Feito com base em <strong>quem você é.</strong><br>
-    Sua rotina. Seu corpo. Seu objetivo.<br>
-    De qualquer lugar. No seu tempo. Para sempre.
+    Chega de tentativas que não funcionam.<br>
+    <strong>Seu corpo merece um plano feito para ele.</strong><br>
+    Sua rotina. Seu objetivo. Do jeito que só você vive.
   </p>
   <div class="hero-preco">
     <div class="val"><sup>R$</sup>20</div>
@@ -611,7 +611,7 @@ footer{
       <iframe src="https://www.youtube.com/embed/Il2owZD5Wds?rel=0&modestbranding=1&autoplay=1&mute=1&loop=1&playlist=Il2owZD5Wds" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
     </div>
   </div>
-  <p class="video-legenda">"Resultados reais, de pessoas reais — com direcionamento certo."</p>
+  
 </section>
 
 <!-- ══ R$20 DESTAQUE ══ -->
@@ -701,6 +701,27 @@ footer{
       <div class="fstep"><div class="fsn">2</div><h3>Responda o questionário</h3><p>Suas respostas moldam o guia para a sua realidade.</p></div>
       <div class="fstep"><div class="fsn">3</div><h3>Baixe seu PDF</h3><p>Botão ao final. Acesso na hora. Vitalício.</p></div>
     </div>
+  </div>
+</section>
+
+
+<!-- ══ GALERIA ══ -->
+<section style="background:var(--v1);padding:0 0 80px;">
+  <div style="max-width:1020px;margin:0 auto;padding:0 24px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">
+      <div style="overflow:hidden;aspect-ratio:4/5;position:relative;">
+        <img src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/trudee-wiltshire-dupe.jpeg" alt="Alimentação saudável" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"/>
+      </div>
+      <div style="overflow:hidden;aspect-ratio:4/5;position:relative;">
+        <video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block;" src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/8171423-uhd_3840_2160_25fps.mp4"></video>
+      </div>
+      <div style="overflow:hidden;aspect-ratio:4/5;position:relative;">
+        <img src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/alina-valentina-dupe.jpeg" alt="Resultado real" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"/>
+      </div>
+    </div>
+    <p style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.5vw,22px);font-style:italic;color:rgba(245,240,224,0.5);margin-top:24px;line-height:1.6;">
+      Escolhas simples. Consistência real. <em style="color:var(--laranja3);">Resultado que aparece.</em>
+    </p>
   </div>
 </section>
 
