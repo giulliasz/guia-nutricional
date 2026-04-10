@@ -609,7 +609,6 @@ footer{
   <div style="max-width:380px;margin:0 auto 24px;">
     <div style="padding:177.78% 0 0 0;position:relative;border-radius:16px;overflow:hidden;">
       <iframe src="https://www.youtube.com/embed/Il2owZD5Wds?rel=0&modestbranding=1&autoplay=1&mute=1&loop=1&playlist=Il2owZD5Wds" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
-      <div style="position:absolute;inset:0;z-index:2;cursor:default;"></div>
     </div>
   </div>
   
