@@ -562,14 +562,14 @@ footer{
 
 <!-- CTA FLUTUANTE -->
 <div class="cta-float">
-  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn-float">Quero meu guia — R$20</a>
+  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn-float">Quero meu guia — R$20,00</a>
   <small>Pagamento único · Acesso vitalício</small>
 </div>
 
 <!-- NAV -->
 <nav>
   <div class="nav-logo">Seu <span>Nutricionista</span></div>
-  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn">Quero meu guia — R$20</a>
+  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn">Quero meu guia — R$20,00</a>
 </nav>
 
 <!-- ══ HERO ══ -->
@@ -588,7 +588,7 @@ footer{
     Sua rotina. Seu objetivo. Do jeito que só você vive.
   </p>
   <div class="hero-preco">
-    <div class="val"><sup>R$</sup>20</div>
+    <div class="val"><sup>R$</sup>20,00</div>
     <div class="info">
       <strong>Investimento único · Acesso vitalício</strong>
       <span>Um investimento tão baixo<br>que serve para você.</span>
@@ -644,7 +644,7 @@ footer{
       <div class="ci"><span class="ic">🛵</span><span class="vl">R$45</span><p class="dc">Delivery que some em 20 min</p></div>
       <div class="ci"><span class="ic">🍔</span><span class="vl">R$28</span><p class="dc">Lanche que piora seu corpo</p></div>
       <div class="ci"><span class="ic">☕</span><span class="vl">R$22</span><p class="dc">Café com bolo na padaria</p></div>
-      <div class="ci hl"><span class="ic">📋</span><span class="vl">R$20</span><p class="dc">Seu guia nutricional + treino · vitalício</p></div>
+      <div class="ci hl"><span class="ic">📋</span><span class="vl">R$20,00</span><p class="dc">Seu guia nutricional + treino · vitalício</p></div>
     </div>
     <div class="vitalicio">
       <span class="vi">♾️</span>
@@ -653,7 +653,7 @@ footer{
         <p>Você paga uma vez e tem acesso para sempre. Gerado exclusivamente para você — ninguém recebe igual.</p>
       </div>
     </div>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero investir em mim — R$20</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero investir em mim — R$20,00</a>
   </div>
 </section>
 
@@ -687,7 +687,7 @@ footer{
       <div class="ctrl-tag"><span>♾️</span> Para sempre</div>
       <div class="ctrl-tag"><span>🎯</span> Para o seu objetivo</div>
     </div>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero ter esse controle — R$20</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero ter esse controle — R$20,00</a>
   </div>
 </section>
 
@@ -772,7 +772,7 @@ footer{
     <div class="o-selo">Pagamento único · Acesso vitalício</div>
     <h2 class="dk">Seu plano.<br><em>Agora.</em></h2>
     <div class="preco-de">de R$ 97,00</div>
-    <div class="preco-por"><sup>R$</sup>20</div>
+    <div class="preco-por"><sup>R$</sup>20,00</div>
     <p class="preco-psico">
       Menos do que um delivery.<br>
       Menos do que um lanche que piora seu corpo.<br>
@@ -799,7 +799,7 @@ footer{
       <div class="fmstep"><span class="fmn">2.</span><p><strong>Responda</strong> o questionário</p></div>
       <div class="fmstep"><span class="fmn">3.</span><p><strong>Baixe seu PDF</strong> no botão final</p></div>
     </div>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-full">Quero meu guia personalizado — R$20</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-full">Quero meu guia personalizado — R$20,00</a>
     <p style="margin-top:8px;font-size:11px;color:rgba(245,240,224,0.2);text-align:center;letter-spacing:1.5px;text-transform:uppercase;">Pagamento único · Acesso vitalício</p>
     <div class="garantia">
       <span>🛡️</span>
@@ -816,7 +816,7 @@ footer{
   <div class="c">
     <h2 class="dk" style="font-size:clamp(26px,5vw,54px);">Consistência.<br>Escolhas simples.<br><em>Mudança possível.</em></h2>
     <p>Nenhuma transformação começa com perfeição.<br>Começa com <strong>uma decisão de R$20, tomada agora.</strong></p>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero meu guia por R$20</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero meu guia por R$20,00,00</a>
   </div>
 </section>
 
@@ -1112,7 +1112,7 @@ var chatHistorico = [];
 var chatEnviando = false;
 var chatAberto = false;
 
-var CHAT_SYSTEM = "Você é o assistente de suporte do Guia Nutricional Personalizado. Responda em português brasileiro, de forma simples, humana e acolhedora. Seja direto e objetivo — respostas curtas de 2 a 4 linhas. O produto é um guia nutricional + treino em PDF por R$20, personalizado com base num questionário. A pessoa paga, responde o questionário e baixa o PDF na hora. Tem 7 dias de garantia. Nunca prometa resultados específicos. Se a pergunta for muito clínica, oriente a buscar um profissional.";
+var CHAT_SYSTEM = "Você é o assistente de suporte do Guia Nutricional Personalizado. Responda em português brasileiro, de forma simples, humana e acolhedora. Seja direto e objetivo — respostas curtas de 2 a 4 linhas. O produto é um guia nutricional + treino em PDF por R$20,00, personalizado com base num questionário. A pessoa paga, responde o questionário e baixa o PDF na hora. Tem 7 dias de garantia. Nunca prometa resultados específicos. Se a pergunta for muito clínica, oriente a buscar um profissional.";
 
 function toggleChat() {
   chatAberto = !chatAberto;
