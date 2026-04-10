@@ -2,7 +2,7 @@ export default function Home() {
   if (typeof window !== 'undefined') {
     setTimeout(() => {
 
-      // ── SCROLL REVEAL ──
+      // SCROLL REVEAL
       const obs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
           if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
@@ -10,10 +10,10 @@ export default function Home() {
       },{threshold:0.07});
       document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-      // ── POPUP LEADS ──
+      // POPUP
       window.fecharPopup = function(){
-        var popup = document.getElementById('leadPopup');
-        if(popup) popup.classList.remove('show');
+        var p = document.getElementById('leadPopup');
+        if(p) p.classList.remove('show');
       };
       window.irParaForms = function(){
         window.fecharPopup();
@@ -23,21 +23,20 @@ export default function Home() {
         window.fecharPopup();
         window.location.href = 'https://pay.kiwify.com.br/y8GYnfg';
       };
-      window.abrirPopup = function(e){
-        if(e) e.preventDefault();
-        var popup = document.getElementById('leadPopup');
-        if(popup) popup.classList.add('show');
-      };
       function initPopup(){
         document.querySelectorAll('a[href="https://pay.kiwify.com.br/y8GYnfg"]').forEach(function(btn){
-          btn.onclick = function(e){ e.preventDefault(); window.abrirPopup(e); };
+          btn.onclick = function(e){
+            e.preventDefault();
+            var p = document.getElementById('leadPopup');
+            if(p) p.classList.add('show');
+          };
         });
       }
       initPopup();
       setTimeout(initPopup, 1000);
       setTimeout(initPopup, 2500);
 
-      // ── CHAT IA ──
+      // CHAT - usa /api/chat no servidor
       var chatHistorico = [];
       var chatEnviando = false;
 
@@ -53,11 +52,11 @@ export default function Home() {
       window.addChatMsg = function(role, text){
         var msgs = document.getElementById('chatMsgs');
         if(!msgs) return;
-        var typing = document.getElementById('chatTyping');
-        if(typing) typing.className = 'chat-typing';
+        var t = document.getElementById('chatTyping');
+        if(t) t.className = 'chat-typing';
         var div = document.createElement('div');
         div.className = 'cmsg ' + role;
-        div.innerHTML = (role === 'bot' ? '<div class="cmsg-av">🥗</div>' : '<div class="cmsg-av">👤</div>') +
+        div.innerHTML = (role==='bot'?'<div class="cmsg-av">🥗</div>':'<div class="cmsg-av">👤</div>') +
           '<div class="cmsg-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
         msgs.appendChild(div);
         msgs.scrollTop = msgs.scrollHeight;
@@ -65,7 +64,7 @@ export default function Home() {
 
       window.showTyping = function(show){
         var t = document.getElementById('chatTyping');
-        if(t) t.className = 'chat-typing' + (show ? ' show' : '');
+        if(t) t.className = 'chat-typing' + (show?' show':'');
         var msgs = document.getElementById('chatMsgs');
         if(show && msgs) msgs.scrollTop = 99999;
       };
@@ -75,24 +74,21 @@ export default function Home() {
         if(!input) return;
         var texto = input.value.trim();
         if(!texto || chatEnviando) return;
-
         var sugs = document.getElementById('chatSugs');
         if(sugs) sugs.style.display = 'none';
         input.value = '';
         input.style.height = 'auto';
         window.addChatMsg('user', texto);
         chatHistorico.push({role:'user', content:texto});
-
         chatEnviando = true;
-        var sendBtn = document.getElementById('chatSend');
-        if(sendBtn) sendBtn.disabled = true;
+        var btn = document.getElementById('chatSend');
+        if(btn) btn.disabled = true;
         window.showTyping(true);
-
         try {
           var res = await fetch('/api/chat', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ messages: chatHistorico })
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({messages: chatHistorico})
           });
           var data = await res.json();
           var resposta = data.response || 'Desculpe, tive um problema. Tente novamente!';
@@ -100,26 +96,25 @@ export default function Home() {
           window.addChatMsg('bot', resposta);
         } catch(e) {
           window.showTyping(false);
-          window.addChatMsg('bot', 'Ops, problema de conexão. Tente novamente em instantes! 🙏');
+          window.addChatMsg('bot', 'Ops, problema de conexão. Tente novamente! 🙏');
         }
-
         chatEnviando = false;
-        if(sendBtn) sendBtn.disabled = false;
+        if(btn) btn.disabled = false;
       };
 
       window.usarSug = function(btn){
-        var input = document.getElementById('chatInput');
-        if(input){ input.value = btn.textContent; window.enviarChat(); }
+        var inp = document.getElementById('chatInput');
+        if(inp){ inp.value = btn.textContent; window.enviarChat(); }
       };
 
       var chatInput = document.getElementById('chatInput');
       if(chatInput){
         chatInput.addEventListener('keydown', function(e){
-          if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); window.enviarChat(); }
+          if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); window.enviarChat(); }
         });
         chatInput.addEventListener('input', function(){
-          this.style.height = 'auto';
-          this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+          this.style.height='auto';
+          this.style.height=Math.min(this.scrollHeight,80)+'px';
         });
       }
 
