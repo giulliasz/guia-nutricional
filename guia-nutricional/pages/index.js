@@ -558,6 +558,7 @@ footer{
 
 <!-- ══ HERO ══ -->
 <section class="hero">
+  <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.35;" src="https://raw.githubusercontent.com/giulliasz/guia-nutricional/main/han-nilla-dupe.mov"></video>
   <div class="hero-badge">Protocolo Nutricional Exclusivo</div>
   <h1>
     <span class="l1">Guia</span>
