@@ -205,24 +205,111 @@ Crie um GUIA NUTRICIONAL E DE TREINO COMPLETO E PERSONALIZADO em português bras
 <title>Guia Nutricional - ${d.nome}</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Georgia,serif;background:#fff;color:#1a1a1a;padding:40px;font-size:14px;line-height:1.9;max-width:800px;margin:0 auto;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-h1{font-size:26px;font-weight:700;color:#1a3a1a;margin:32px 0 8px;border-bottom:3px solid #2d6a35;padding-bottom:8px;text-align:center;}
-h2{font-size:20px;font-weight:700;color:#1a3a1a;margin:28px 0 8px;padding:8px 16px;background:#f0f9f0;border-left:4px solid #2d6a35;}
-h3{font-size:14px;font-weight:700;color:#2d6a35;margin:16px 0 5px;text-transform:uppercase;letter-spacing:1px;}
-p{margin-bottom:10px;text-align:justify;}
-strong{color:#1a1a1a;font-weight:700;}
+body{
+  font-family:Georgia,serif;
+  background:#f9f9f9;
+  color:#222;
+  font-size:16px;
+  line-height:2;
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+.pagina{
+  max-width:860px;
+  margin:0 auto;
+  padding:48px 52px;
+  background:#fff;
+}
+.topo{
+  background:linear-gradient(135deg,#1a4a20,#2d6a35);
+  padding:40px 48px;
+  text-align:center;
+  margin-bottom:40px;
+}
+.topo h1{
+  font-family:Georgia,serif;
+  font-size:34px;
+  font-weight:700;
+  color:#fff;
+  margin-bottom:8px;
+  letter-spacing:0.5px;
+}
+.topo p{
+  font-size:14px;
+  color:rgba(255,255,255,0.75);
+  margin:0;
+}
+h1{
+  font-family:Georgia,serif;
+  font-size:26px;
+  font-weight:700;
+  color:#1a3a1a;
+  margin:40px 0 12px;
+  padding-bottom:10px;
+  border-bottom:3px solid #2d6a35;
+  text-align:left;
+}
+h2{
+  font-family:Georgia,serif;
+  font-size:20px;
+  font-weight:700;
+  color:#1a3a1a;
+  margin:32px 0 10px;
+  padding:10px 18px;
+  background:#f0f9f0;
+  border-left:5px solid #2d6a35;
+  text-align:left;
+}
+h3{
+  font-size:15px;
+  font-weight:700;
+  color:#2d6a35;
+  margin:20px 0 6px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  text-align:left;
+}
+p{
+  margin-bottom:12px;
+  text-align:left;
+  color:#333;
+}
+strong{color:#111;font-weight:700;}
 em{font-style:italic;color:#2d6a35;}
-li{margin-left:20px;margin-bottom:5px;}
-hr{border:none;border-top:2px solid #e0e0e0;margin:24px 0;}
-.topo{background:linear-gradient(135deg,#1a4a20,#2d6a35);padding:32px;margin-bottom:32px;text-align:center;}
-.topo h1{color:#ffffff;border:none;font-size:32px;margin:0 0 6px;}
-.topo p{font-size:12px;color:rgba(255,255,255,0.7);margin:0;}
-.btn{position:fixed;top:12px;right:12px;background:#2d6a35;color:#fff;border:none;font-weight:700;font-size:13px;padding:10px 20px;cursor:pointer;z-index:999;}
-@media print{.btn{display:none;} body{padding:20px;}}
+ul,ol{margin:10px 0 14px 24px;}
+li{margin-bottom:7px;color:#333;font-size:15px;line-height:1.8;}
+hr{border:none;border-top:2px solid #e0e8e0;margin:28px 0;}
+br{display:block;margin:4px 0;}
+.btn-salvar{
+  position:fixed;
+  top:16px;right:16px;
+  background:#2d6a35;
+  color:#fff;
+  border:none;
+  font-family:Arial,sans-serif;
+  font-weight:700;
+  font-size:14px;
+  padding:12px 24px;
+  cursor:pointer;
+  border-radius:4px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  z-index:999;
+}
+@media print{
+  .btn-salvar{display:none;}
+  body{background:#fff;}
+  .pagina{padding:32px;}
+}
 </style></head><body>
-<button class="btn" onclick="window.print()">Salvar PDF</button>
-<div class="topo"><h1>Guia Nutricional Personalizado</h1><p>Seu Nutricionista - Exclusivo para ${d.nome}</p></div>
-${html}</body></html>`;
+<button class="btn-salvar" onclick="window.print()">💾 Salvar como PDF</button>
+<div class="pagina">
+<div class="topo">
+  <h1>Guia Nutricional Personalizado</h1>
+  <p>Seu Nutricionista &nbsp;·&nbsp; Exclusivo para ${d.nome}</p>
+</div>
+${html}
+</div>
+</body></html>`;
 
     const blob = new Blob([page], { type: 'text/html;charset=utf-8' });
     window.open(URL.createObjectURL(blob), '_blank');
