@@ -1,7 +1,6 @@
 export default function Home() {
   if (typeof window !== 'undefined') {
     setTimeout(() => {
-
       const obs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
           if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
@@ -704,7 +703,7 @@ footer{
 
 <!-- FAIXA -->
 <div class="faixa">
-  ✦ <u>R$20 — menos do que você paga num lanche que só piora o seu corpo</u> ✦
+  ✦ <u>R$20 — menos do que um delivery. Menos do que um plano de R$300. O mesmo resultado.</u> ✦
 </div>
 
 
@@ -731,8 +730,9 @@ footer{
     <p class="vinte-hl"><em>R$20.</em> Um investimento<br>tão baixo que serve para você.</p>
     <p class="vinte-sub">
       Por menos do que um delivery que te deixa culpado.<br>
-      Por menos do que um lanche que piora o seu corpo.<br>
-      Por menos do que aquilo que some da sua carteira<br>toda semana sem você nem perceber.
+      Por menos do que uma consulta que custa R$300 e você faz uma vez.<br>
+      Por menos do que aquilo que some da sua carteira<br>toda semana sem você nem perceber.<br><br>
+      <strong style="color:var(--laranja2);font-style:normal;">Por que pagar R$300 por um plano se você tem tudo aqui por R$20?</strong>
     </p>
     <div class="compare">
       <div class="ci"><span class="ic">🛵</span><span class="vl">R$45</span><p class="dc">Delivery que some em 20 min</p></div>
@@ -924,11 +924,11 @@ footer{
     <a href="/privacidade" style="color:rgba(245,240,224,0.3);text-decoration:none;" target="_blank">Política de Privacidade</a>
   </span><br>
   <span style="margin-top:6px;display:inline-block;font-size:11px;color:rgba(245,240,224,0.2);">
-    ✉ <a href="mailto:seunutricionista15@gmail.com" style="color:rgba(245,240,224,0.2);text-decoration:none;">seunutricionista15@gmail.com</a>
+    ✉ <a href="/cdn-cgi/l/email-protection#a4d7c1d1cad1d0d6cdc7cdcbcacdd7d0c59591e4c3c9c5cdc88ac7cbc9" style="color:rgba(245,240,224,0.2);text-decoration:none;"><span class="__cf_email__" data-cfemail="d0a3b5a5bea5a4a2b9b3b9bfbeb9a3a4b1e1e590b7bdb1b9bcfeb3bfbd">[email&#160;protected]</span></a>
   </span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const obs=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
 },{threshold:0.07});
@@ -1400,18 +1400,6 @@ function irParaPagamento(){
 // Intercepta TODOS os botões principais da página
 function initPopup(){
   document.querySelectorAll('a[href="https://pay.kiwify.com.br/y8GYnfg"]').forEach(function(btn){
-    btn.removeEventListener('click', abrirPopup);
-    btn.addEventListener('click', abrirPopup);
-  });
-}
-// Tenta múltiplas vezes para garantir que o DOM esteja pronto
-setTimeout(initPopup, 500);
-setTimeout(initPopup, 1500);
-setTimeout(initPopup, 3000);
-</script>
-
-</body>
-</html>
-` }} />
+    btn.removeEventLi` }} />
   );
 }
