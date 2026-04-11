@@ -2,7 +2,6 @@ export default function Home() {
   if (typeof window !== 'undefined') {
     setTimeout(() => {
 
-      // SCROLL REVEAL
       const obs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
           if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
@@ -10,7 +9,6 @@ export default function Home() {
       },{threshold:0.07});
       document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-      // POPUP
       window.fecharPopup = function(){
         var p = document.getElementById('leadPopup');
         if(p) p.classList.remove('show');
@@ -36,7 +34,6 @@ export default function Home() {
       setTimeout(initPopup, 1000);
       setTimeout(initPopup, 2500);
 
-      // CHAT - usa /api/chat no servidor
       var chatHistorico = [];
       var chatEnviando = false;
 
@@ -919,9 +916,16 @@ footer{
 
 <footer>
   <span class="fl">Seu Nutricionista</span>
-  © 2024 · Todos os direitos reservados<br>
+  © 2025 · Todos os direitos reservados<br>
   Material informativo e educativo · Não substitui acompanhamento médico ou nutricional clínico<br>
-  Política de privacidade · Termos de uso
+  <span style="margin-top:8px;display:inline-block;">
+    <a href="/termos" style="color:rgba(245,240,224,0.3);text-decoration:none;" target="_blank">Termos de Uso</a>
+    &nbsp;·&nbsp;
+    <a href="/privacidade" style="color:rgba(245,240,224,0.3);text-decoration:none;" target="_blank">Política de Privacidade</a>
+  </span><br>
+  <span style="margin-top:6px;display:inline-block;font-size:11px;color:rgba(245,240,224,0.2);">
+    ✉ <a href="mailto:seunutricionista15@gmail.com" style="color:rgba(245,240,224,0.2);text-decoration:none;">seunutricionista15@gmail.com</a>
+  </span>
 </footer>
 
 <script>
