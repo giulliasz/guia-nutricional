@@ -2,26 +2,27 @@ import { useEffect } from 'react';
 
 export default function Questionario() {
   useEffect(() => {
-    // Seleção visual radio/checkbox
-    document.querySelectorAll('.op').forEach(function(op){
-      op.addEventListener('click', function(){
-        var input = this.querySelector('input');
-        if(input.type === 'radio'){
-          var name = input.name;
-          document.querySelectorAll('input[name="'+name+'"]').forEach(function(r){
-            r.closest('.op').classList.remove('selected');
-          });
-          input.checked = true;
-          this.classList.add('selected');
-        } else {
-          input.checked = !input.checked;
-          this.classList.toggle('selected', input.checked);
-        }
+    function initOpcoes(){
+      document.querySelectorAll('.op').forEach(function(op){
+        op.addEventListener('click', function(){
+          var input = this.querySelector('input');
+          if(input.type === 'radio'){
+            var name = input.name;
+            document.querySelectorAll('input[name="'+name+'"]').forEach(function(r){
+              r.closest('.op').classList.remove('selected');
+            });
+            input.checked = true;
+            this.classList.add('selected');
+          } else {
+            input.checked = !input.checked;
+            this.classList.toggle('selected', input.checked);
+          }
+        });
       });
-    });
-
-    // Inicializa progress
-    if(typeof updateProgress === 'function') updateProgress();
+    }
+    setTimeout(initOpcoes, 300);
+    setTimeout(initOpcoes, 800);
+    setTimeout(initOpcoes, 1500);
   }, []);
 
   const html = `<!DOCTYPE html>
