@@ -836,7 +836,7 @@ function downloadPDF(){
   btn.textContent = '⏳ Preparando PDF...';
   btn.disabled = true;
 
-  fetch('/api/gerar-pdf', {
+  fetch('/api/gerarpdf', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ content: guiaContent })
