@@ -135,6 +135,7 @@ DADOS:
 - Rotina: ${d.rotina_trabalho} | Acorda: ${d.horario_acordar}
 - Cozinhar: ${d.tempo_cozinhar} | Detalhe: ${d.rotina_detalhe || 'não informado'}
 - Refeições: ${d.num_refeicoes} | Restrições: ${d.restricoes.join(', ') || 'nenhuma'}
+- Orçamento semanal: ${d.orcamento || 'não informado'}
 - Não gosta: ${d.nao_gosta || 'nada'} | Gosta: ${d.mais_gosta || 'não informado'}
 - Alimentação atual: ${d.alimentacao_atual || 'não informado'}
 - Exercício: ${d.pratica_exercicio} | Academia: ${d.academia} | Tempo treino: ${d.tempo_treino || 'não informado'}
@@ -204,21 +205,23 @@ Crie um GUIA NUTRICIONAL E DE TREINO COMPLETO E PERSONALIZADO em português bras
 <title>Guia Nutricional - ${d.nome}</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#0a1f0e;color:#f5f0e0;padding:36px;font-size:13px;line-height:1.8;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-h1{font-size:26px;font-weight:700;color:#f5f0e0;margin:28px 0 8px;border-bottom:2px solid #e8934a;padding-bottom:8px;}
-h2{font-size:19px;font-weight:700;color:#fac070;margin:22px 0 7px;}
-h3{font-size:12px;font-weight:700;color:#8fcf9a;margin:14px 0 4px;text-transform:uppercase;}
-strong{color:#f5f0e0;font-weight:700;}em{font-style:italic;color:#f0a85a;}
-li{margin-left:18px;margin-bottom:3px;}
-hr{border:none;border-top:1px solid rgba(232,147,74,0.2);margin:18px 0;}
-.topo{background:#1a4a20;border:1px solid rgba(232,147,74,0.25);padding:22px;margin-bottom:24px;text-align:center;}
-.topo h1{border:none;font-size:30px;margin:0 0 5px;}
-.topo p{font-size:11px;color:rgba(245,240,224,0.4);}
-.btn{position:fixed;top:10px;right:10px;background:#e8934a;color:#0a1f0e;border:none;font-weight:700;font-size:13px;padding:10px 18px;cursor:pointer;z-index:999;}
-@media print{.btn{display:none;}}
+body{font-family:Georgia,serif;background:#fff;color:#1a1a1a;padding:40px;font-size:14px;line-height:1.9;max-width:800px;margin:0 auto;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+h1{font-size:26px;font-weight:700;color:#1a3a1a;margin:32px 0 8px;border-bottom:3px solid #2d6a35;padding-bottom:8px;text-align:center;}
+h2{font-size:20px;font-weight:700;color:#1a3a1a;margin:28px 0 8px;padding:8px 16px;background:#f0f9f0;border-left:4px solid #2d6a35;}
+h3{font-size:14px;font-weight:700;color:#2d6a35;margin:16px 0 5px;text-transform:uppercase;letter-spacing:1px;}
+p{margin-bottom:10px;text-align:justify;}
+strong{color:#1a1a1a;font-weight:700;}
+em{font-style:italic;color:#2d6a35;}
+li{margin-left:20px;margin-bottom:5px;}
+hr{border:none;border-top:2px solid #e0e0e0;margin:24px 0;}
+.topo{background:linear-gradient(135deg,#1a4a20,#2d6a35);padding:32px;margin-bottom:32px;text-align:center;}
+.topo h1{color:#ffffff;border:none;font-size:32px;margin:0 0 6px;}
+.topo p{font-size:12px;color:rgba(255,255,255,0.7);margin:0;}
+.btn{position:fixed;top:12px;right:12px;background:#2d6a35;color:#fff;border:none;font-weight:700;font-size:13px;padding:10px 20px;cursor:pointer;z-index:999;}
+@media print{.btn{display:none;} body{padding:20px;}}
 </style></head><body>
-<button class="btn" onclick="window.print()">💾 Salvar PDF</button>
-<div class="topo"><h1>Guia Nutricional Personalizado</h1><p>Seu Nutricionista · Exclusivo para ${d.nome}</p></div>
+<button class="btn" onclick="window.print()">Salvar PDF</button>
+<div class="topo"><h1>Guia Nutricional Personalizado</h1><p>Seu Nutricionista - Exclusivo para ${d.nome}</p></div>
 ${html}</body></html>`;
 
     const blob = new Blob([page], { type: 'text/html;charset=utf-8' });
@@ -431,6 +434,18 @@ ${html}</body></html>`;
             <label style={lbl}>Restrições alimentares</label>
             {['Nenhuma restrição', 'Vegetariano', 'Vegano', 'Intolerante à lactose', 'Intolerante ao glúten', 'Alergia a frutos do mar'].map(v => (
               <Opcao key={v} selecionado={d.restricoes.includes(v)} onClick={() => toggle('restricoes', v)} label={v} />
+            ))}
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <label style={lbl}>Qual seu orçamento semanal para alimentação?</label>
+            {[
+              ['até R$50/semana', 'Baixo — até R$50 por semana', 'Preciso de opções muito baratas'],
+              ['R$50 a R$100/semana', 'Médio — R$50 a R$100 por semana', 'Ingredientes acessíveis'],
+              ['R$100 a R$200/semana', 'Bom — R$100 a R$200 por semana', 'Variedade razoável'],
+              ['acima de R$200/semana', 'Confortável — acima de R$200 por semana', 'Sem restrições de orçamento'],
+            ].map(([v, l, sub]) => (
+              <Opcao key={v} selecionado={d.orcamento === v} onClick={() => upd('orcamento', v)} label={l} sub={sub} />
             ))}
           </div>
 
