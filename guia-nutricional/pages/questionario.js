@@ -832,30 +832,52 @@ Ceia (se necessário):
 }
 
 function downloadPDF(){
-  var btn = document.getElementById('btnDownload');
-  btn.textContent = '⏳ Preparando PDF...';
-  btn.disabled = true;
+  // Abre janela de impressão/PDF com o conteúdo formatado
+  var html = guiaContent
+    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^- (.*$)/gm, '<li>$1</li>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/\n/g, '<br>');
 
-  fetch('/api/gerarpdf', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ content: guiaContent })
-  })
-  .then(function(r){ return r.blob(); })
-  .then(function(blob){
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'meu-guia-nutricional-personalizado.pdf';
-    a.click();
-    btn.textContent = '✅ PDF baixado!';
-    btn.disabled = false;
-  })
-  .catch(function(){
-    btn.textContent = '⬇️ Baixar meu guia em PDF';
-    btn.disabled = false;
-    alert('Erro ao gerar PDF. Tente novamente.');
-  });
+  var janela = window.open('', '_blank');
+  janela.document.write(\`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Meu Guia Nutricional Personalizado</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;background:#0a1f0e;color:#f5f0e0;padding:40px;font-size:13px;line-height:1.8;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+h1{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:#f5f0e0;margin:36px 0 8px;border-bottom:2px solid #e8934a;padding-bottom:10px;}
+h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#fac070;margin:28px 0 8px;}
+h3{font-size:13px;font-weight:600;color:#8fcf9a;margin:18px 0 5px;letter-spacing:1px;text-transform:uppercase;}
+p,br+br{margin-bottom:8px;color:rgba(245,240,224,0.85);}
+strong{color:#f5f0e0;font-weight:600;}
+em{font-style:italic;color:#f0a85a;}
+li{margin-bottom:4px;color:rgba(245,240,224,0.8);margin-left:20px;}
+hr{border:none;border-top:1px solid rgba(232,147,74,0.2);margin:24px 0;}
+.topo{background:linear-gradient(135deg,#1a4a20,#0d2810);border:1px solid rgba(232,147,74,0.25);padding:28px;margin-bottom:28px;text-align:center;}
+.topo h1{border:none;font-size:38px;margin:0 0 8px;}
+.topo p{font-size:12px;color:rgba(245,240,224,0.4);}
+.btn-print{position:fixed;top:16px;right:16px;background:#e8934a;color:#0a1f0e;border:none;font-family:'Jost',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;padding:12px 24px;cursor:pointer;z-index:999;}
+@media print{.btn-print{display:none;} body{padding:20px;}}
+</style>
+</head>
+<body>
+<button class="btn-print" onclick="window.print()">⬇️ Salvar como PDF</button>
+<div class="topo">
+  <h1>Guia Nutricional Personalizado</h1>
+  <p>Seu Nutricionista • Material exclusivo e personalizado para você</p>
+</div>
+\${html}
+</body>
+</html>\`);
+  janela.document.close();
 }
 </script>
 </body>
