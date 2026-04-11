@@ -835,6 +835,33 @@ footer{
   </div>
 </section>
 
+<!-- ══ PROVA SOCIAL ══ -->
+<section style="background:var(--v2);padding:48px 24px;text-align:center;" class="reveal">
+  <div style="max-width:720px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(232,147,74,0.08);border:1px solid var(--bl);padding:14px 28px;margin-bottom:20px;">
+      <span style="font-size:20px;">🔥</span>
+      <span style="font-size:13px;font-weight:600;color:var(--laranja3);letter-spacing:1px;">ALTA PROCURA — ÚLTIMAS HORAS COM ESSE PREÇO</span>
+    </div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,28px);font-style:italic;color:var(--creme);line-height:1.6;margin-bottom:16px;">
+      Mais de <strong style="color:var(--laranja2);font-style:normal;">pessoas reais</strong> já receberam<br>o guia e estão aplicando agora.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:20px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:22px;">✅</span>
+        <span style="font-size:13px;font-weight:300;color:rgba(245,240,224,0.6);">Entrega imediata após o pagamento</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:22px;">🛡️</span>
+        <span style="font-size:13px;font-weight:300;color:rgba(245,240,224,0.6);">7 dias de garantia total</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:22px;">♾️</span>
+        <span style="font-size:13px;font-weight:300;color:rgba(245,240,224,0.6);">Acesso vitalício ao seu PDF</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ FEEDBACKS ══ -->
 <section class="feed reveal">
   <div class="cw">
