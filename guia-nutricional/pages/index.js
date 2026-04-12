@@ -123,7 +123,7 @@ export default function Home() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seu Nutricionista — Guia Nutricional Personalizado</title>
+<title>Seu Nutricionista — Protocolo Nutricional Exclusivo</title>
 
 <!-- Meta Pixel Code -->
 <script>
@@ -655,14 +655,19 @@ footer{
 
 <!-- CTA FLUTUANTE -->
 <div class="cta-float">
-  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn-float">Quero meu guia — R$37,00</a>
+  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn-float">QUERO MEU PROTOCOLO — R$37,00</a>
   <small>Pagamento único · Acesso vitalício</small>
 </div>
 
 <!-- NAV -->
+<!-- BARRA ESCASSEZ -->
+<div style="background:#e8934a;padding:10px 24px;text-align:center;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;color:#0a1f0e;letter-spacing:0.3px;">
+  🔥 Oferta de lançamento: <strong>R$37,00</strong> <span style="text-decoration:line-through;opacity:0.6;font-weight:400;">R$97,00</span> — Válido apenas para os próximos 30 guias
+</div>
+
 <nav>
   <div class="nav-logo">Seu <span>Nutricionista</span></div>
-  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn">Quero meu guia — R$37,00</a>
+  <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn">QUERO MEU PROTOCOLO — R$37,00</a>
 </nav>
 
 <!-- ══ HERO ══ -->
@@ -688,7 +693,7 @@ footer{
     </div>
   </div>
   <div class="hero-cta">
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero meu guia agora</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">QUERO MEU PROTOCOLO AGORA</a>
     <small>Pague · Responda · Baixe seu PDF na hora</small>
   </div>
   <div class="food-strip">
@@ -738,7 +743,7 @@ footer{
       <div class="ci"><span class="ic">🛵</span><span class="vl">R$45</span><p class="dc">Delivery que some em 20 min</p></div>
       <div class="ci"><span class="ic">🍔</span><span class="vl">R$28</span><p class="dc">Lanche que piora seu corpo</p></div>
       <div class="ci"><span class="ic">☕</span><span class="vl">R$22</span><p class="dc">Café com bolo na padaria</p></div>
-      <div class="ci hl"><span class="ic">📋</span><span class="vl">R$37,00</span><p class="dc">Seu guia nutricional + treino · vitalício</p></div>
+      <div class="ci hl"><span class="ic">📋</span><span class="vl">R$37,00</span><p class="dc">Seu protocolo nutricional + treino · vitalício</p></div>
     </div>
     <div class="vitalicio">
       <span class="vi">♾️</span>
@@ -747,7 +752,7 @@ footer{
         <p>Você paga uma vez e tem acesso para sempre. Gerado exclusivamente para você — ninguém recebe igual.</p>
       </div>
     </div>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero investir em mim — R$37,00</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">QUERO MEU PROTOCOLO — R$37,00</a>
   </div>
 </section>
 
@@ -763,7 +768,7 @@ footer{
       <div class="dor-card"><span class="di">🌀</span><p>A internet diz coisas diferentes todo dia e <strong>você não sabe mais em quem confiar.</strong></p></div>
     </div>
     <div class="dor-virada">
-      O problema nunca foi você. Foi a falta de um plano que respeitasse quem você realmente é.
+      O problema nunca foi você. Foi a falta de um protocolo que respeitasse quem você realmente é.
     </div>
   </div>
 </section>
@@ -781,7 +786,7 @@ footer{
       <div class="ctrl-tag"><span>♾️</span> Para sempre</div>
       <div class="ctrl-tag"><span>🎯</span> Para o seu objetivo</div>
     </div>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero ter esse controle — R$37,00</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">QUERO MEU PROTOCOLO AGORA — R$37,00</a>
   </div>
 </section>
 
@@ -791,7 +796,7 @@ footer{
     <div class="tag-s" style="color:var(--laranja3);">O que está incluso</div>
     <h2 class="dk" style="font-size:clamp(24px,4vw,46px);text-align:center;margin-bottom:36px;">Tudo que você precisa.<br><em>Nada que não vai usar.</em></h2>
     <div class="recebe-grid">
-      <div class="recebe-item"><div class="rn">01</div><div><h3>Plano alimentar personalizado</h3><p>Baseado no seu objetivo real. Nada genérico.</p></div></div>
+      <div class="recebe-item"><div class="rn">01</div><div><h3>Protocolo alimentar personalizado</h3><p>Baseado no seu objetivo real. Nada genérico.</p></div></div>
       <div class="recebe-item"><div class="rn">02</div><div><h3>Treino adaptado ao seu objetivo</h3><p>Para o que você quer alcançar, no tempo que você tem.</p></div></div>
       <div class="recebe-item"><div class="rn">03</div><div><h3>Estratégia para a sua rotina</h3><p>Funciona junto com a sua vida real.</p></div></div>
       <div class="recebe-item"><div class="rn">04</div><div><h3>Substituições inteligentes</h3><p>Restaurante, viagem, dia corrido — você sempre vai saber o que fazer.</p></div></div>
@@ -920,7 +925,7 @@ footer{
       <div class="fmstep"><span class="fmn">2.</span><p><strong>Responda</strong> o questionário</p></div>
       <div class="fmstep"><span class="fmn">3.</span><p><strong>Baixe seu PDF</strong> no botão final</p></div>
     </div>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-full">Quero meu guia personalizado — R$37,00</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-full">QUERO MEU PROTOCOLO — R$37,00</a>
     <p style="margin-top:8px;font-size:11px;color:rgba(245,240,224,0.2);text-align:center;letter-spacing:1.5px;text-transform:uppercase;">Pagamento único · Acesso vitalício</p>
     <div class="garantia">
       <span>🛡️</span>
@@ -937,7 +942,7 @@ footer{
   <div class="c">
     <h2 class="dk" style="font-size:clamp(26px,5vw,54px);">Consistência.<br>Escolhas simples.<br><em>Mudança possível.</em></h2>
     <p>Nenhuma transformação começa com perfeição.<br>Começa com <strong>uma decisão de R$37, tomada agora.</strong></p>
-    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">Quero meu guia por R$37,00</a>
+    <a href="https://pay.kiwify.com.br/y8GYnfg" class="btn btn-lg">QUERO MEU PROTOCOLO — R$37,00</a>
   </div>
 </section>
 
@@ -1207,7 +1212,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   <div class="chat-msgs" id="chatMsgs">
     <div class="cmsg bot">
       <div class="cmsg-av">🥗</div>
-      <div class="cmsg-bubble">Olá! 👋 Pode me perguntar qualquer coisa sobre o guia nutricional. Estou aqui para ajudar!</div>
+      <div class="cmsg-bubble">Olá! 👋 Pode me perguntar qualquer coisa sobre o protocolo nutricional. Estou aqui para ajudar!</div>
     </div>
   </div>
 
@@ -1240,7 +1245,7 @@ var chatHistorico = [];
 var chatEnviando = false;
 var chatAberto = false;
 
-var CHAT_SYSTEM = "Você é o assistente de suporte do Guia Nutricional Personalizado. Responda em português brasileiro, de forma simples, humana e acolhedora. Seja direto e objetivo — respostas curtas de 2 a 4 linhas. O produto é um guia nutricional + treino em PDF por R$37,00, personalizado com base num questionário. A pessoa paga, responde o questionário e baixa o PDF na hora. Tem 7 dias de garantia. Nunca prometa resultados específicos. Se a pergunta for muito clínica, oriente a buscar um profissional.";
+var CHAT_SYSTEM = "Você é o assistente de suporte do Protocolo Nutricional Exclusivo. Responda em português brasileiro, de forma simples, humana e acolhedora. Seja direto e objetivo — respostas curtas de 2 a 4 linhas. O produto é um protocolo nutricional + treino em PDF por R$37,00, personalizado com base num questionário. A pessoa paga, responde o questionário e baixa o PDF na hora. Tem 7 dias de garantia. Nunca prometa resultados específicos. Se a pergunta for muito clínica, oriente a buscar um profissional.";
 
 function toggleChat() {
   chatAberto = !chatAberto;
