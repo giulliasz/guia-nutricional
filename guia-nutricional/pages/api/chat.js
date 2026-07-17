@@ -4,6 +4,11 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.error('chat.js: ANTHROPIC_API_KEY não configurada');
+      return res.status(200).json({ response: 'Desculpe, tive um problema. Tente novamente!' });
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -20,10 +25,17 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+
+    if (data.error) {
+      console.error('chat.js: erro da Anthropic API:', data.error);
+      return res.status(200).json({ response: 'Desculpe, tive um problema. Tente novamente!' });
+    }
+
     const text = data.content && data.content[0] ? data.content[0].text : 'Desculpe, tive um problema. Tente novamente!';
     res.status(200).json({ response: text });
 
   } catch (error) {
+    console.error('chat.js: erro interno:', error);
     res.status(500).json({ error: 'Erro interno', response: 'Ops, problema de conexão. Tente novamente!' });
   }
 }
