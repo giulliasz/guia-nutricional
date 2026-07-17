@@ -38,6 +38,7 @@ REGRAS OBRIGATÓRIAS SOBRE ORÇAMENTO:
     const data = await response.json();
 
     if (data.error) {
+      console.error('gerar.js: erro da Anthropic API:', data.error);
       return res.status(500).json({ error: data.error.message, content: null });
     }
 
